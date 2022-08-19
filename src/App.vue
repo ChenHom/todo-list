@@ -2,20 +2,20 @@
 import { ref, watch } from 'vue';
 import Item from './components/Item.vue';
 
-let todos = ref<TodoList[]>(JSON.parse(localStorage.getItem('todos') || '[]'))
+let todoList = ref<Todo[]>(JSON.parse(localStorage.getItem('todoList') || '[]'))
 let comment = ref('')
 
 
-watch(() => todos.value, () => localStorage.setItem('todos', JSON.stringify(todos.value)), { deep: true })
+watch(() => todoList.value, () => localStorage.setItem('todoList', JSON.stringify(todoList.value)), { deep: true })
 
 function completed(todoIndex: string, isCompleted: boolean) {
   console.log(todoIndex, isCompleted)
-  let index = todos.value.findIndex(item => item.index === todoIndex)
-  todos.value[index].completed = isCompleted
+  let index = todoList.value.findIndex(item => item.index === todoIndex)
+  todoList.value[index].completed = isCompleted
 }
 
 function pushTodo(comment: string, completed: boolean = false): void {
-  todos.value.push({
+  todoList.value.push({
     context: {
       comment: comment,
       datetime: new Date().toLocaleString('zh-TW', { hour12: false })
@@ -33,7 +33,7 @@ function add(): void {
 }
 
 function clear(): void {
-  todos.value = todos.value.filter(item => !item.completed)
+  todoList.value = todoList.value.filter(item => !item.completed)
 }
 </script>
 
@@ -57,7 +57,7 @@ function clear(): void {
   </div>
 
   <TransitionGroup name="fade" tag="ul">
-    <Item v-for="(todo, key) in todos" :key="todo.index"
+    <Item v-for="todo in todoList" :key="todo.index"
       :comment="todo.context.comment"
       :datetime="todo.context.datetime"
       :complete="todo.completed"

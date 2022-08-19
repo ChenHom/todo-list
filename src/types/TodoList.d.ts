@@ -1,10 +1,8 @@
-declare interface TodoContext {
+declare interface Todo {
     context: {
         comment: string;
         datetime: string;
     };
     index: string;
-}
-declare interface TodoList extends TodoContext {
     completed: boolean
 }
