@@ -11,12 +11,11 @@ let c = () => {
     emit('todoCompleted', index, !completed.value)
     completed.value = !completed.value
 }
-
 </script>
 
 <template>
-    <div class="shadow-md mt-5" @click="c">
-        <div class="px-6 pt-2 pb-5 bg-white space-y-3 border border-1 border-gray-100">
+    <div class="shadow-md mt-5 hover:shadow-inner">
+        <div class="px-6 pt-2 pb-5 bg-white space-y-3 border border-1 border-gray-100 hover:border-gray-200">
             <div class="text-left">
                 <span class="ml-5 text-gray-300 text-xs" @mouseover="dateHover = true"
                     @mouseleave="dateHover = false">{{ date }}</span>
@@ -24,7 +23,7 @@ let c = () => {
             </div>
             <div class="flex items-start">
                 <div class="h-5">
-                    <input :id="`comment${index}`" type="checkbox" :checked="completed"
+                    <input :id="`comment${index}`" type="checkbox" :checked="completed" @change="c"
                         class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
                 </div>
                 <div class="ml-3">

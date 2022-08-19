@@ -6,11 +6,8 @@ body {
   margin: 0;
   display: flex;
   place-items: flex-start;
-  /* min-width: 1100px; */
 }
 #app {
-  /* min-width: 40vw;
-  max-width: 40vw; */
   margin: 50px auto;
   padding: 2rem;
   text-align: center;
