@@ -10,7 +10,7 @@ const { tasks, addTodo, todoClearCompleted, todoCompleted } = useTasks()
 let comment = ref('')
 
 provide('toCompleted', todoCompleted)
-const sortedTasks = computed(() => tasks.value.sort((t1, t2) => compare(t1.date, t2.date)))
+const sortedTasks = computed(() => tasks.value.sort((t1, t2) => compare(t2.date, t1.date)))
 watch(() => tasks.value, () => { serializer('serialize', tasks.value) }, { deep: true })
 
 onMounted(() => {
@@ -35,12 +35,12 @@ function add(): void {
         <div class="col-span-3">
           <div class="mt-1 flex rounded-md shadow-sm">
             <button type="button" @click="todoClearCompleted" data-testid="clear"
-              class="mr-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-md text-xs leading-4 font-medium text-gray-400 hover:bg-gray-50">清空已完成</button>
+              class="mr-5 bg-blue-50 py-2 px-3 border border-gray-300 rounded-md shadow-md text-xs leading-4 font-medium text-gray-400 hover:bg-gray-50 hover:shadow-inner">清空已完成</button>
             <input type="text" id="todo" autofocus v-model="comment" @keypress.enter="add" data-testid="content"
-              class="focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md shadow-md flex-1 block w-full sm:text-sm border-gray-300"
-              placeholder="...">
+              class=" focus:border-sky-300 rounded-l-md shadow-md flex-1 block w-full sm:text-sm border-gray-300 hover:shadow-inner placeholder-gray-300"
+              placeholder="do it...">
             <button type="button" @click="add" data-testid="add"
-              class="bg-white py-2 px-3 border border-l-0 border-gray-300 rounded-r-md shadow-md text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50">添加</button>
+              class="bg-blue-100 py-2 px-3 border border-l-0 border-blue-300 rounded-r-md shadow-md text-sm leading-4 font-semibold text-gray-500 hover:bg-blue-200 hover:shadow-inner">添加</button>
           </div>
         </div>
       </div>

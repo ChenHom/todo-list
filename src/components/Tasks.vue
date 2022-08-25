@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Todo } from '../types/Todo';
 import Item from './Todo.vue'
 
@@ -8,45 +8,43 @@ let isOpen = ref(true)
 </script>
 
 <template>
-    <div class="mt-5 md:p-2 p-1 bg-white border-b border-gray-300 text-gray-400" @click="isOpen = !isOpen">
-        {{ date }}
+  <div class="cursor-pointer mt-8 p-2 bg-white border-b border-gray-300 text-gray-400 relative"
+    @click="isOpen = !isOpen">
+    {{ date }}
+    <div role="button" class="-ml-2 border-2 border-gray-400 board bottom-3 right-2" :class="{ 'board-grow': !isOpen }">...</div>
+  </div>
+  <Transition name="slide-fade">
+    <div v-show="isOpen">
+      <TransitionGroup name="list" tag="ul">
+        <Item v-for="todo in todos" :key="todo.index"
+          :todo="{ ...todo }" :date="date" />
+      </TransitionGroup>
     </div>
-    <Transition name="slide-fade">
-        <div v-show="isOpen">
-            <TransitionGroup name="fade" tag="ul">
-                <Item v-for="todo in todos" :key="todo.index"
-                    :todo="{ ...todo }" :date="date" />
-            </TransitionGroup>
-        </div>
-    </Transition>
+  </Transition>
 </template>
 
 <style scoped>
-/* 1. declare transition */
-.fade-move,
-.fade-enter-active,
-.fade-leave-active {
-    transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
 }
-
-/* 2. declare enter from and leave to state */
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-    transform: scaleY(0.01) translate(30px, 0);
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
-
 /* 3. ensure leaving items are taken out of layout flow so that moving
       animations can be calculated correctly. */
 .fade-leave-active {
-    position: absolute;
+  position: absolute;
 }
+
 /*
   Enter and leave animations can use different
   durations and timing functions.
 */
 .slide-fade-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.3s cubic-bezier(0, 0.8, 0.9, 1) 0.2s;
 }
 
 .slide-fade-leave-active {
@@ -57,5 +55,21 @@ let isOpen = ref(true)
 .slide-fade-leave-to {
   transform: translateY(-30px);
   opacity: 0;
+}
+
+.board {
+  width: 18px;
+  height: 0px;
+  position: absolute;
+  transform: translateX(-50%);
+  transition: height 0.5s ease-in, font-size 0.2s linear;
+  text-align: center;
+  font-size: 0;
+}
+
+.board-grow {
+  transition: height 0.5s ease-out, font-size 0.4s linear 0.3s;
+  height: 18px;
+  font-size: 5px;
 }
 </style>
