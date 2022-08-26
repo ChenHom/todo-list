@@ -4,10 +4,12 @@ import { serializer } from './types/serializer';
 import useTasks from './types/useTasks';
 import Tasks from './components/Tasks.vue';
 import { compare } from './utils/comparison';
+import { Priority } from './types/Todo';
 
 const { tasks, addTodo, todoClearCompleted, todoCompleted } = useTasks()
 
 let comment = ref('')
+let priority = ref(Priority.NORMAL)
 
 provide('toCompleted', todoCompleted)
 const sortedTasks = computed(() => tasks.value.sort((t1, t2) => compare(t2.date, t1.date)))
@@ -22,9 +24,15 @@ onMounted(() => {
 
 function add(): void {
   if (comment.value) {
-    addTodo(comment.value)
+    addTodo(comment.value, priority.value)
   }
+
+  reset()
+}
+
+function reset() {
   comment.value = ''
+  priority.value = Priority.NORMAL
 }
 </script>
 
@@ -38,7 +46,21 @@ function add(): void {
               class="mr-5 bg-blue-50 py-2 px-3 border border-gray-300 rounded-md shadow-md text-xs leading-4 font-medium text-gray-400 hover:bg-gray-50 hover:shadow-inner">清空已完成</button>
             <input type="text" id="todo" autofocus v-model="comment" @keypress.enter="add" data-testid="content"
               class=" focus:border-sky-300 rounded-l-md shadow-md flex-1 block w-full sm:text-sm border-gray-300 hover:shadow-inner placeholder-gray-300"
-              placeholder="do it...">
+              placeholder="do it..."/>
+            <div class="w-16 h-10 relative bg-red-100">
+              <input type="radio" class="priority-button opacity-0" v-model="priority" @keypress.enter="add"
+                :value="Priority.QUICK" name="radio" id="quick-priority">
+              <div class="priority-tile quick-priority">
+                <label for="quick-priority" class="priority-label">急事</label>
+              </div>
+            </div>
+            <div class="w-16 h-10 relative bg-sky-200">
+              <input type="radio" class="priority-button" name="radio" v-model="priority" @keypress.enter="add"
+                :value="Priority.NORMAL" id="slow-priority">
+              <div class="priority-tile slow-priority">
+                <label for="slow-priority" class="priority-label">緩辦</label>
+              </div>
+            </div>
             <button type="button" @click="add" data-testid="add"
               class="bg-blue-100 py-2 px-3 border border-l-0 border-blue-300 rounded-r-md shadow-md text-sm leading-4 font-semibold text-gray-500 hover:bg-blue-200 hover:shadow-inner">添加</button>
           </div>
@@ -67,5 +89,32 @@ function add(): void {
       animations can be calculated correctly. */
 .fade-leave-active {
   position: absolute;
+}
+
+.priority-tile {
+  @apply border border-y border-gray-300 shadow-md text-sm flex place-content-center;
+  height: inherit;
+  transition: font-size 500ms ease;
+}
+
+.priority-button {
+  @apply absolute top-0 left-0 w-full h-full opacity-0;
+}
+
+.priority-label {
+  @apply place-self-center text-slate-500;
+}
+
+.priority-button:checked+.priority-tile {
+  @apply border-2;
+  font-size: 18px;
+}
+
+.priority-button:checked+.priority-tile.quick-priority {
+  @apply border-red-500 border-opacity-30;
+}
+
+.priority-button:checked+.priority-tile.slow-priority {
+  @apply border-sky-500 border-opacity-30;
 }
 </style>

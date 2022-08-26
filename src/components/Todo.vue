@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, watch } from 'vue';
-import { Todo } from '../types/Todo';
-import { pickLocalDateString } from '../utils/date'
+import { Priority, Todo } from '../types/Todo';
+import Badge from './Badge.vue';
 
 const { todo, date } = defineProps<{ todo: Todo, date: string }>()
 
@@ -10,23 +10,30 @@ let dateHover = ref(false)
 
 const toCompleted = inject('toCompleted') as { (date: string, index: number, complete: boolean): void }
 watch(() => completed.value, (newValue) => toCompleted(date, todo.index, newValue))
+function isHightPriority(priority: Priority) {
+    return priority === Priority.QUICK;
+}
 </script>
 
 <template>
     <div class="shadow-md mt-2 hover:shadow-inner" data-testid="card">
         <div class="pt-2 pb-5 bg-white space-y-3 border border-1 border-gray-100 hover:border-gray-200">
-
-            <div class="flex items-start">
-                <div class="max-h-10 w-36 text-right">
+            <div class="flex items-start mt-2">
+                <div class="max-h-10 w-36 text-left">
+                    <span class="ml-2 mr-1 text-gray-300 text-xs" @mouseover="dateHover = true"
+                        @mouseleave="dateHover = false" v-text="todo.time" />
                     <Transition name="slide">
                         <span class="text-gray-300 text-xs" v-show="dateHover" v-text="date" />
                     </Transition>
-                    <span class="mx-1 text-gray-300 text-xs" @mouseover="dateHover = true"
-                        @mouseleave="dateHover = false" v-text="todo.time" />
                 </div>
-                <div class="w-full"></div>
+                <div class="w-full flex justify-end pr-2">
+                    <Badge class="opacity-70" :class="{
+                        'bg-red-500': isHightPriority(todo.priority),
+                        'bg-sky-500': !isHightPriority(todo.priority)
+                    }">{{ todo.priority }}
+                    </Badge>
+                </div>
             </div>
-
             <div class="flex items-start">
                 <div class="max-h-10 my-auto w-16">
                     <input :id="`c_${todo.index}`" type="checkbox" v-model="completed"

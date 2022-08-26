@@ -1,23 +1,24 @@
 import { ref } from "vue"
 import { isSameDays, pickLocal24HourTimeString, pickLocalDateString } from "../utils/date"
 import { Task } from "./Task"
-import { Todo } from "./Todo"
+import { Priority, Todo } from "./Todo"
 
 const useTasks = () => {
     const tasks = ref<Task[]>([])
 
-    const createTodo = (content: string): Todo => {
+    const createTodo = (content: string, priority: Priority): Todo => {
         return {
             index: Date.now(),
             content: content,
             completed: false,
+            priority: priority,
             time: pickLocal24HourTimeString()
         }
     }
 
-    const addTodo = (content: string) => {
+    const addTodo = (content: string, priority: Priority = Priority.NORMAL) => {
         const date = pickLocalDateString()
-        const todo = createTodo(content)
+        const todo = createTodo(content, priority)
         const task = findTask(date)
 
         if (task) {

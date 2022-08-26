@@ -1,11 +1,12 @@
 import { render, fireEvent, screen } from '@testing-library/vue'
 import App from './App.vue'
-import { Todo } from './types/Todo'
+import { Priority, Todo } from './types/Todo'
 
 const todoFactory = (todo?: Partial<Todo>): Todo => ({
     index: Date.now(),
-    content: 'todo content',
+    content: 'todo test content',
     completed: false,
+    priority: Priority.NORMAL,
     time: new Date().toLocaleTimeString("zh-TW", { hour12: false }),
     ...todo
 })
@@ -17,6 +18,16 @@ describe('Task List', () => {
         const main = render(App)
         main.getByTestId('add')
         main.getByTestId('clear')
+    })
+
+    it('能建立 todo', () => {
+        const todo = todoFactory();
+
+        expect(todo).toHaveProperty('index')
+        expect(todo).toHaveProperty('content')
+        expect(todo).toHaveProperty('completed')
+        expect(todo).toHaveProperty('priority')
+        expect(todo).toHaveProperty('time')
     })
 
     it('能增加新的事項', async () => {
@@ -50,7 +61,7 @@ describe('Task List', () => {
         main.getByText(todo.time)
 
         const clearBtn = main.getByTestId('clear')
-        const clearElement = main.getByLabelText(todo.content)
+        const clearElement = main.getByText(todo.content)
 
         await fireEvent.click(clearElement)
         await fireEvent.click(clearBtn)
