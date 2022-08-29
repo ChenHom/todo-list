@@ -8,10 +8,13 @@ let isOpen = ref(true)
 </script>
 
 <template>
-  <div class="cursor-pointer mt-8 p-2 bg-white border-b border-gray-300 text-gray-400 relative"
-    @click="isOpen = !isOpen">
-    {{ date }}
-    <div role="button" class="-ml-2 border-2 border-gray-400 board bottom-3 right-2" :class="{ 'board-grow': !isOpen }">...</div>
+  <div class="">
+    <div class="flex justify-center cursor-pointer mt-8 p-2 bg-white border-b border-gray-300 text-gray-400 relative"
+      @click="isOpen = !isOpen">
+      <span v-text="date"></span>
+      <div role="button" class="-ml-2 border-2 border-gray-400 board bottom-3 right-2"
+        :class="{ 'board-grow': !isOpen }">...</div>
+    </div>
   </div>
   <Transition name="slide-fade">
     <div v-show="isOpen">
@@ -28,11 +31,13 @@ let isOpen = ref(true)
 .list-leave-active {
   transition: all 0.5s ease;
 }
+
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
 }
+
 /* 3. ensure leaving items are taken out of layout flow so that moving
       animations can be calculated correctly. */
 .fade-leave-active {

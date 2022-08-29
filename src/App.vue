@@ -46,15 +46,15 @@ function reset() {
               class="mr-5 bg-blue-50 py-2 px-3 border border-gray-300 rounded-md shadow-md text-xs leading-4 font-medium text-gray-400 hover:bg-gray-50 hover:shadow-inner">清空已完成</button>
             <input type="text" id="todo" autofocus v-model="comment" @keypress.enter="add" data-testid="content"
               class=" focus:border-sky-300 rounded-l-md shadow-md flex-1 block w-full sm:text-sm border-gray-300 hover:shadow-inner placeholder-gray-300"
-              placeholder="do it..."/>
-            <div class="w-16 h-10 relative bg-red-100">
+              placeholder="do it...">
+            <div class="w-16 relative bg-red-100 flex">
               <input type="radio" class="priority-button opacity-0" v-model="priority" @keypress.enter="add"
                 :value="Priority.QUICK" name="radio" id="quick-priority">
               <div class="priority-tile quick-priority">
                 <label for="quick-priority" class="priority-label">急事</label>
               </div>
             </div>
-            <div class="w-16 h-10 relative bg-sky-200">
+            <div class="w-16 relative bg-sky-200 flex">
               <input type="radio" class="priority-button" name="radio" v-model="priority" @keypress.enter="add"
                 :value="Priority.NORMAL" id="slow-priority">
               <div class="priority-tile slow-priority">
@@ -92,7 +92,7 @@ function reset() {
 }
 
 .priority-tile {
-  @apply border border-y border-gray-300 shadow-md text-sm flex place-content-center;
+  @apply border border-y border-gray-300 shadow-md text-sm flex place-content-center flex-grow;
   height: inherit;
   transition: font-size 500ms ease;
 }
