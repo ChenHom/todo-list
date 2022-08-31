@@ -3,16 +3,17 @@ import { inject, ref, watch } from 'vue';
 import { Priority, Todo } from '../types/Todo';
 import Badge from './Badge.vue';
 
+defineEmits<{ (e: 'sort', column: 'priority' | 'time'): void }>()
 const { todo, date } = defineProps<{ todo: Todo, date: string }>()
 
 let completed = ref(todo.completed)
 let dateHover = ref(false)
+let isHightPriority = todo.priority === Priority.QUICK
 
 const toCompleted = inject('toCompleted') as { (date: string, index: number, complete: boolean): void }
+const sort = inject('sortTodo') as { (column: 'priority' | 'time'): void }
 watch(() => completed.value, (newValue) => toCompleted(date, todo.index, newValue))
-function isHightPriority(priority: Priority) {
-    return priority === Priority.QUICK;
-}
+
 </script>
 
 <template>
@@ -20,16 +21,18 @@ function isHightPriority(priority: Priority) {
         <div class="pt-2 pb-5 bg-white space-y-3 border border-1 border-gray-100 hover:border-gray-200">
             <div class="flex items-start mt-2">
                 <div class="max-h-10 w-36 text-left">
-                    <span class="ml-2 mr-1 text-gray-300 text-xs" @mouseover="dateHover = true"
-                        @mouseleave="dateHover = false" v-text="todo.time" />
+                    <span class="ml-2 mr-1 text-gray-300 text-xs cursor-default" @mouseover="dateHover = true"
+                        @mouseleave="dateHover = false" @click="sort('time')" v-text="todo.time" />
                     <Transition name="slide">
                         <span class="text-gray-300 text-xs" v-show="dateHover" v-text="date" />
                     </Transition>
                 </div>
                 <div class="w-full flex justify-end pr-2">
-                    <Badge class="opacity-70" :class="{
-                        'bg-red-500': isHightPriority(todo.priority),
-                        'bg-sky-500': !isHightPriority(todo.priority)
+                    <Badge class="opacity-70 cursor-default" @click="sort('priority')" :class="{
+                        'bg-red-200': isHightPriority,
+                        'text-red-500': isHightPriority,
+                        'bg-sky-200': !isHightPriority,
+                        'text-sky-500': !isHightPriority
                     }">{{ todo.priority }}
                     </Badge>
                 </div>

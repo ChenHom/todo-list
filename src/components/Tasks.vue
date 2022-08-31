@@ -1,10 +1,30 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { provide, ref } from 'vue';
 import { Todo } from '../types/Todo';
+import { sort } from '../utils/comparison';
 import Item from './Todo.vue'
 
 const { date, todos } = defineProps<{ date: string, todos: Todo[] }>()
+
 let isOpen = ref(true)
+
+const sortTodo = () => {
+  let direction = {
+    priority: { direction: true, sort: (t1: Todo, t2: Todo) => sort(t1.priority, t2.priority) },
+    time: { direction: true, sort: (t1: Todo, t2: Todo) => sort(t1.time, t2.time) }
+  }
+
+  return (column: 'priority' | 'time') => {
+    direction[column].direction = !direction[column].direction
+
+    if (direction[column].direction) {
+      todos.sort((t1, t2) => direction[column].sort(t1, t2))
+    } else {
+      todos.sort((t1, t2) => direction[column].sort(t2, t1))
+    }
+  }
+}
+provide('sortTodo', sortTodo())
 </script>
 
 <template>
@@ -19,8 +39,7 @@ let isOpen = ref(true)
   <Transition name="slide-fade">
     <div v-show="isOpen">
       <TransitionGroup name="list" tag="ul">
-        <Item v-for="todo in todos" :key="todo.index"
-          :todo="{ ...todo }" :date="date" />
+        <Item v-for="todo in todos" :key="todo.index" :todo="{ ...todo }" :date="date" />
       </TransitionGroup>
     </div>
   </Transition>

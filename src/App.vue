@@ -3,7 +3,7 @@ import { computed, onMounted, provide, ref, watch } from 'vue';
 import { serializer } from './types/serializer';
 import useTasks from './types/useTasks';
 import Tasks from './components/Tasks.vue';
-import { compare } from './utils/comparison';
+import { sort } from './utils/comparison';
 import { Priority } from './types/Todo';
 
 const { tasks, addTodo, todoClearCompleted, todoCompleted } = useTasks()
@@ -12,7 +12,7 @@ let comment = ref('')
 let priority = ref(Priority.NORMAL)
 
 provide('toCompleted', todoCompleted)
-const sortedTasks = computed(() => tasks.value.sort((t1, t2) => compare(t2.date, t1.date)))
+const sortedTasks = computed(() => tasks.value.sort((t1, t2) => sort(t2.date, t1.date)))
 watch(() => tasks.value, () => { serializer('serialize', tasks.value) }, { deep: true })
 
 onMounted(() => {
@@ -47,11 +47,11 @@ function reset() {
             <input type="text" id="todo" autofocus v-model="comment" @keypress.enter="add" data-testid="content"
               class=" focus:border-sky-300 rounded-l-md shadow-md flex-1 block w-full sm:text-sm border-gray-300 hover:shadow-inner placeholder-gray-300"
               placeholder="do it...">
-            <div class="w-16 relative bg-red-100 flex">
+            <div class="w-16 relative bg-red-200 flex">
               <input type="radio" class="priority-button opacity-0" v-model="priority" @keypress.enter="add"
                 :value="Priority.QUICK" name="radio" id="quick-priority">
               <div class="priority-tile quick-priority">
-                <label for="quick-priority" class="priority-label text-pink-500">急事</label>
+                <label for="quick-priority" class="priority-label text-red-500">急事</label>
               </div>
             </div>
             <div class="w-16 relative bg-sky-200 flex">

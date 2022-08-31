@@ -1,4 +1,4 @@
-export function compare<T>(c1: T, c2: T) {
+export function sort<T>(c1: T, c2: T) {
     if (c1 < c2) {
         return -1
     } else if (c1 > c2) {
