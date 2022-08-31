@@ -51,14 +51,14 @@ function reset() {
               <input type="radio" class="priority-button opacity-0" v-model="priority" @keypress.enter="add"
                 :value="Priority.QUICK" name="radio" id="quick-priority">
               <div class="priority-tile quick-priority">
-                <label for="quick-priority" class="priority-label">急事</label>
+                <label for="quick-priority" class="priority-label text-pink-500">急事</label>
               </div>
             </div>
             <div class="w-16 relative bg-sky-200 flex">
               <input type="radio" class="priority-button" name="radio" v-model="priority" @keypress.enter="add"
                 :value="Priority.NORMAL" id="slow-priority">
               <div class="priority-tile slow-priority">
-                <label for="slow-priority" class="priority-label">緩辦</label>
+                <label for="slow-priority" class="priority-label text-sky-500">緩辦</label>
               </div>
             </div>
             <button type="button" @click="add" data-testid="add"
@@ -102,12 +102,11 @@ function reset() {
 }
 
 .priority-label {
-  @apply place-self-center text-slate-500;
+  @apply place-self-center;
 }
 
 .priority-button:checked+.priority-tile {
-  @apply border-2;
-  font-size: 18px;
+  @apply border-2 text-xl;
 }
 
 .priority-button:checked+.priority-tile.quick-priority {
