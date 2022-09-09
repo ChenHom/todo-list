@@ -6,6 +6,7 @@ export enum Priority {
 export interface Todo {
     index: number;
     content: string;
+    tags?: string[],
     completed: boolean;
     priority: Priority;
     time: string

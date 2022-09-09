@@ -6,19 +6,20 @@ import { Priority, Todo } from "./Todo"
 const useTasks = () => {
     const tasks = ref<Task[]>([])
 
-    const createTodo = (content: string, priority: Priority): Todo => {
+    const createTodo = (content: string, tags: string[], priority: Priority): Todo => {
         return {
             index: Date.now(),
             content: content,
+            tags: tags,
             completed: false,
             priority: priority,
             time: pickLocal24HourTimeString()
         }
     }
 
-    const addTodo = (content: string, priority: Priority = Priority.NORMAL) => {
+    const addTodo = (content: string, tags: string[], priority: Priority = Priority.NORMAL) => {
         const date = pickLocalDateString()
-        const todo = createTodo(content, priority)
+        const todo = createTodo(content, tags, priority)
         const task = findTask(date)
 
         if (task) {

@@ -15,6 +15,7 @@ provide('toCompleted', todoCompleted)
 
 const sortedTasks = computed(() => tasks.value.sort((t1, t2) => sort(t2.date, t1.date)))
 const contentRows = computed(() => comment.value.split('\n').length)
+
 watch(() => tasks.value, () => { serializer('serialize', tasks.value) }, { deep: true })
 
 onMounted(() => {
@@ -25,8 +26,11 @@ onMounted(() => {
 })
 
 function add(): void {
-  if (comment.value) {
-    addTodo(comment.value, priority.value)
+  if (comment.value !== '') {
+    const tags = [...comment.value.matchAll(/#\S+/g)].map(tag => tag[0])
+    tags.forEach(tag => comment.value = comment.value.replace(tag, ''))
+
+    addTodo(comment.value, tags, priority.value)
   }
 
   reset()
