@@ -12,7 +12,9 @@ let comment = ref('')
 let priority = ref(Priority.NORMAL)
 
 provide('toCompleted', todoCompleted)
+
 const sortedTasks = computed(() => tasks.value.sort((t1, t2) => sort(t2.date, t1.date)))
+const contentRows = computed(() => comment.value.split('\n').length)
 watch(() => tasks.value, () => { serializer('serialize', tasks.value) }, { deep: true })
 
 onMounted(() => {
@@ -44,9 +46,9 @@ function reset() {
           <div class="mt-1 flex rounded-md shadow-sm">
             <button type="button" @click="todoClearCompleted" data-testid="clear"
               class="mr-5 bg-blue-50 py-2 px-3 border border-gray-300 rounded-md shadow-md text-xs leading-4 font-medium text-gray-400 hover:bg-gray-50 hover:shadow-inner">清空已完成</button>
-            <input type="text" id="todo" autofocus v-model="comment" @keypress.enter="add" data-testid="content"
+            <textarea id="todo" autofocus v-model.trim="comment" @keypress.alt.enter="add" data-testid="content"
               class=" focus:border-sky-300 rounded-l-md shadow-md flex-1 block w-full sm:text-sm border-gray-300 hover:shadow-inner placeholder-gray-300"
-              placeholder="do it...">
+              placeholder="do it..." cols="30" :rows="contentRows"></textarea>
             <div class="w-16 relative bg-red-200 flex">
               <input type="radio" class="priority-button opacity-0" v-model="priority" @keypress.enter="add"
                 :value="Priority.QUICK" name="radio" id="quick-priority">
