@@ -3,14 +3,13 @@
 # abort on errors
 set -e
 
-# build
-npm run build
-
 # navigate into the build output directory
 cd dist
 
-git add -A
-git commit -m 'deploy'
+if [ -n "$(git status --porcelain)" ]; then
+    git add -A
+    git commit -m 'deploy'
+fi
 
 git push -f git@github.com:chenhom/todo-list.git master:gh-pages
 
