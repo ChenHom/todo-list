@@ -44,7 +44,7 @@ function reset() {
 
 <template>
   <div class="shadow-md sm:overflow-hidden">
-    <div class="px-4 py-5 bg-white space-y-6 sm:p-6 border border-1 border-gray-100">
+    <div class="px-4 py-2 bg-white space-y-6 sm:p-6 border border-1 border-gray-100">
       <div class="grid grid-cols-3 gap-6">
         <div class="col-span-3">
           <div class="mt-1 flex rounded-md shadow-sm">

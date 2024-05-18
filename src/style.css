@@ -8,7 +8,7 @@ body {
   place-items: flex-start;
 }
 #app {
-  margin: 50px auto;
-  padding: 2rem;
+  margin: 5px auto;
+  padding: 1rem;
   text-align: center;
 }

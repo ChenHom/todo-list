@@ -68,4 +68,25 @@ describe('Task List', () => {
 
         expect(screen.queryByText(todo.time)).not.toBeInTheDocument()
     })
+
+    it('能編輯 todo', async () => {
+        const todo = todoFactory()
+        const main = render(App)
+
+        // add task
+        const addBtn = main.getByTestId('add')
+        const todoContent = main.getByTestId('content')
+
+        await fireEvent.update(todoContent, todo.content)
+        await fireEvent.click(addBtn)
+
+        const editBtn = main.getByTestId('edit')
+        const editContent = main.getByTestId('editContent')
+
+        await fireEvent.click(editBtn)
+        await fireEvent.update(editContent, 'edit content')
+        await fireEvent.click(editBtn)
+
+        main.getByText('edit content')
+    })
 })
